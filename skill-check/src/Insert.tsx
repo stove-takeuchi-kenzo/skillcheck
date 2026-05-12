@@ -1,3 +1,5 @@
+// 登録コンポーネント(登録欄、登録ボタン)
+
 type Props = {
   text: string;
   onTextChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -17,7 +19,7 @@ export const InsertForm = ({ text, onTextChange, onAddTodo }: Props) => {
         value={text}
         onChange={onTextChange}
       />
-      <button type="submit">追加</button>
+      <button type="submit">登録</button>
     </form>
   );
 };
