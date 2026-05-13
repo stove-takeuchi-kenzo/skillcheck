@@ -1,8 +1,7 @@
 import React, { useState } from 'react'
 import './App.css'
-import { FilterSelect } from './Select'
+import { FilterSelect } from './Selct'
 import { InsertForm } from './Insert'
-import { TodoList } from './List'
 
 export const App = () => {
 
@@ -62,25 +61,10 @@ export const App = () => {
     setText('');
   };
 
-  // 「ごみ箱を空にする」ボタン押下
-  const handleClear = () => {
-    setTodos(prev => prev.filter(todo => !todo.removed));
-  };
-
-  //TODOの入力欄更新
-    const handleEdit = (id: number, value: string) => {
-    setTodos((todos) => {
-      const newTodos = todos.map((todo) => {
-        if (todo.id === id) {
-          return { ...todo, text:value };
-        }
-        return todo;
-      });
-
-      return newTodos;
-    });
-  };
-
+// 「ごみ箱を空にする」ボタン押下
+const handleClear = () => {
+  setTodos(prev => prev.filter(todo => !todo.removed));
+};
 
   return (
     <div>
@@ -109,9 +93,16 @@ export const App = () => {
       {/* list全体 */}
       {/* →lineチェックボックス+入力欄+削除・復元ボタン*/}
 
-      <TodoList
-        todos={FilterTodo}
-        onEdit={handleEdit} />
+          <ul style={{ listStyle: "none", padding: 0 }}>
+                {FilterTodo.map(todo => (
+                    <li key={todo.id}>
+                       < input type="text" value={todo.text}
+                            // onChange={(e) => handleEdit(todo.id, e.target.value)}
+                             />
+                
+                    </li>
+                ))}
+            </ul>
     </div>
 
   );
