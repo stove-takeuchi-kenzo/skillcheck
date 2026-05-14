@@ -8,15 +8,15 @@ export const App = () => {
 
   // 入力欄用
   type Todo = {
-    id: number;
-    text: string;
+    readonly id: number;
     completed: boolean;
-    removed: boolean;
+    text: string;
+    deleted: boolean;
   };
-  // id,登録内容,完了済み,削除済み
+  // id,完了済み,登録内容,削除済み
 
   // 選択用
-  type Filter = 'all' | 'completed' | 'active' | 'removed'
+  type Filter = 'all' | 'completed' | 'active' | 'deleted'
   //全てのタスク、完了したタスク、現在のタスク、ごみ箱
 
   //変数初期化
@@ -34,13 +34,13 @@ export const App = () => {
   // 選択したデータのみフィルタして表示する
   const FilterTodo = todos.filter(todo => {
     // フィルタが「現在のタスク」の場合
-    if (filter === 'active') return !todo.completed && !todo.removed;
+    if (filter === 'active') return !todo.completed && !todo.deleted;
     // フィルタが「完了したタスク」の場合
-    if (filter === 'completed') return todo.completed && !todo.removed;
+    if (filter === 'completed') return todo.completed && !todo.deleted;
     // フィルタが「ごみ箱」の場合
-    if (filter === 'removed') return todo.removed;
+    if (filter === 'deleted') return todo.deleted;
     // フィルタが「全てのタスク」の場合
-    return !todo.removed;
+    return !todo.deleted;
   });
 
   //登録欄更新用
@@ -52,9 +52,9 @@ export const App = () => {
 
     const newTodo: Todo = {
       id: Date.now(),
-      text,
       completed: false,
-      removed: false
+      text,
+      deleted: false
     };
 
     setTodos(prev => [newTodo, ...prev]);
@@ -64,15 +64,15 @@ export const App = () => {
 
   // 「ごみ箱を空にする」ボタン押下
   const handleClear = () => {
-    setTodos(prev => prev.filter(todo => !todo.removed));
+    setTodos(prev => prev.filter(todo => !todo.deleted));
   };
 
-  //TODOの入力欄更新
-    const handleEdit = (id: number, value: string) => {
+  //TODOの完了チェックボックス更新
+  const handleComplete = (id: number, checked: boolean) => {
     setTodos((todos) => {
       const newTodos = todos.map((todo) => {
         if (todo.id === id) {
-          return { ...todo, text:value };
+          return { ...todo, completed: checked };
         }
         return todo;
       });
@@ -81,6 +81,33 @@ export const App = () => {
     });
   };
 
+  //TODOの入力欄更新
+  const handleEdit = (id: number, value: string) => {
+    setTodos((todos) => {
+      const newTodos = todos.map((todo) => {
+        if (todo.id === id) {
+          return { ...todo, text: value };
+        }
+        return todo;
+      });
+
+      return newTodos;
+    });
+  };
+
+  //TODOの削除状態更新
+  const handleDelete = (id: number, checked: boolean) => {
+    setTodos((todos) => {
+      const newTodos = todos.map((todo) => {
+        if (todo.id === id) {
+          return { ...todo, deleted: checked };
+        }
+        return todo;
+      });
+
+      return newTodos;
+    });
+  };
 
   return (
     <div>
@@ -102,7 +129,7 @@ export const App = () => {
       }
       {/* フィルタが「ごみ箱を空にする」の場合にボタンを表示 */}
       {
-        (filter === 'removed') && (
+        (filter === 'deleted') && (
           <button onClick={handleClear}>ごみ箱を空にする</button>
         )
       }
@@ -111,7 +138,10 @@ export const App = () => {
 
       <TodoList
         todos={FilterTodo}
-        onEdit={handleEdit} />
+        onEdit={handleEdit}
+        onComplete={handleComplete}
+        onDelete={handleDelete}
+      />
     </div>
 
   );

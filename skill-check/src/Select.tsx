@@ -1,6 +1,6 @@
 // 選択用コンポーネント
 
-type Filter = 'all' | 'completed' | 'active' | 'removed'
+type Filter = 'all' | 'completed' | 'active' | 'deleted'
 
 type Props = {
     filter: Filter;
@@ -17,7 +17,7 @@ export const FilterSelect = ({ filter, onChange }: Props) => {
             <option value="all">すべてのタスク</option>
             <option value="completed">完了したタスク</option>
             <option value="active">現在のタスク</option>
-            <option value="removed">ごみ箱</option>
+            <option value="deleted">ごみ箱</option>
         </select>
     );
 };
