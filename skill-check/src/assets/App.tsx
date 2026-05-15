@@ -2,15 +2,28 @@
 
 import React, { useState } from 'react'
 import './App.css'
-import type { Todo } from './TodoType' // Todo用Type読込
-import type { Filter } from './FilterType' // Filter用Type読込
+import type {Todo} from './TodoType' // Todo用Type読込
+import type {Filter} from './FilterType' // Filter用Type読込
 import { FilterSelect } from './Select' //　選択用コンポーネント読込
 import { InsertForm } from './Insert' // 登録用コンポーネント読込
 import { TodoList } from './List' // リスト用コンポーネント読込
 
 export const App = () => {
 
-  //ステート初期化
+  // 入力欄用
+  // type Todo = {
+  //   readonly id: number;
+  //   completed: boolean;
+  //   text: string;
+  //   deleted: boolean;
+  // };
+  // id,完了済み,登録内容,削除済み
+
+  // // 選択用
+  // type Filter = 'all' | 'completed' | 'active' | 'deleted'
+  // //全てのタスク、完了したタスク、現在のタスク、ごみ箱
+
+  //変数初期化
   const [text, setText] = useState('');
 
   const [filter, setFilter] = useState<Filter>('all');
@@ -101,49 +114,42 @@ export const App = () => {
   };
 
   return (
-    <div className='container'>
-      <div className='content'>
-        {/* コンポーネント分割 */}
-        {/* select 一覧表*/}
+    <div>
+      {/* コンポーネント分割 */}
+      {/* select 一覧表*/}
+      {/* 選択用コンポーネントを表示 */}
+      <FilterSelect filter={filter} onChange={handleFilterChange} />
 
-        <div className='topArea'>
-          {/* 選択用コンポーネントを表示 */}
-          <FilterSelect
-            filter={filter}
-            onChange={handleFilterChange}
+      {/* input 入力欄+登録ボタン/ごみ箱を空にするボタン*/}
+      {/* フィルタが「全てのタスク」もしくは「現在のタスク」の場合に登録コンポーネントを表示 */}
+      {
+        (filter === 'all' || filter === 'active') && (
+          <InsertForm
+            text={text}
+            onTextChange={handleTextChange}
+            onAddTodo={handleAddTodo}
           />
-          
-          {/* フィルタが「ごみ箱」の場合「ごみ箱を空にする」ボタンを表示 */}
-          {
-            (filter === 'deleted') && (
-              <button onClick={handleClear}>
-                ごみ箱を空にする
-              </button>
-            )
-          }
-        </div>
-        {/* フィルタが「全てのタスク」もしくは「現在のタスク」の場合に登録コンポーネントを表示 */}
-        {
-          (filter === 'all' || filter === 'active') && (
-            <InsertForm
-              text={text}
-              onTextChange={handleTextChange}
-              onAddTodo={handleAddTodo}
-            />
-          )
-        }
+        )
+      }
+      {/* フィルタが「ごみ箱を空にする」の場合にボタンを表示 */}
+      {
+        (filter === 'deleted') && (
+          <button onClick={handleClear}>ごみ箱を空にする</button>
+        )
+      }
+      {/* list全体 */}
+      {/* →lineチェックボックス+入力欄+削除・復元ボタン*/}
 
-        {/* list全体 */}
-        {/* →lineチェックボックス+入力欄+削除・復元ボタン*/}
-        <TodoList
-          todos={FilterTodo}
-          onEdit={handleEdit}
-          onComplete={handleComplete}
-          onDelete={handleDelete}
-        />
-      </div>
+      <TodoList
+        todos={FilterTodo}
+        onEdit={handleEdit}
+        onComplete={handleComplete}
+        onDelete={handleDelete}
+      />
     </div>
 
   );
+
+
 
 };

@@ -1,6 +1,6 @@
 // 選択用コンポーネント
 
-type Filter = 'all' | 'completed' | 'active' | 'deleted'
+import type {Filter} from './FilterType' // Filter用Type読込
 
 type Props = {
     filter: Filter;

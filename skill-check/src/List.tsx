@@ -1,11 +1,7 @@
-import { TodoItem } from "./Item";
-
-type Todo = {
-    readonly id: number,
-    completed: boolean,
-    text: string,
-    deleted: boolean
-};
+//リスト用コンポーネント
+import './List.css'
+import type {Todo} from './TodoType' // Todo用Type読込
+import { TodoItem } from "./Item"; //リスト行用コンポーネント読込
 
 type Props = {
     todos: Todo[]
@@ -17,7 +13,7 @@ type Props = {
 
 export const TodoList = ({ todos, onComplete, onEdit, onDelete }: Props) => {
     return (
-        <ul style={{ listStyle: "none", padding: 0 }}>
+        <ul className='todoList'>
             {todos.map((todo) => (
                 <TodoItem
                     key={todo.id}
